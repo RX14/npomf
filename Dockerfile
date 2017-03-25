@@ -1,4 +1,4 @@
-FROM node:4.2.1-onbuild
+FROM node:6.1.0-onbuild
 
 VOLUME ["/usr/src/app/files", "/usr/src/app/database.db"]
 
