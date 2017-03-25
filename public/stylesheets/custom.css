@@ -246,3 +246,10 @@ CSS Folding Cube animation
     height: 0%;
   }
 }
+
+.shutdown {
+  background: #e85f17;
+  color: black;
+  border-radius: 6px;
+  margin-top: 10px;
+}

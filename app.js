@@ -8,16 +8,17 @@ var cookieSession = require('cookie-session');
 var passport = require('passport');
 var GithubStrategy = require('passport-github2').Strategy;
 
-var routes = require('./routes/index');
-var upload = require('./routes/upload');
-var tools  = require('./routes/tools');
-var faq    = require('./routes/faq');
-var contact= require('./routes/contact');
-var login  = require('./routes/kanri/login');
-var stream = require('./routes/kanri/stream');
-var users  = require('./routes/kanri/users');
-var config = require('./config/core');
-var utils  = require('./util/core');
+var routes   = require('./routes/index');
+var upload   = require('./routes/upload');
+var tools    = require('./routes/tools');
+var faq      = require('./routes/faq');
+var contact  = require('./routes/contact');
+var shutdown = require('./routes/shutdown');
+var login    = require('./routes/kanri/login');
+var stream   = require('./routes/kanri/stream');
+var users    = require('./routes/kanri/users');
+var config   = require('./config/core');
+var utils    = require('./util/core');
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -90,6 +91,7 @@ app.use('/upload(.php)?', upload);
 app.use('/tools', tools);
 app.use('/faq', faq);
 app.use('/contact', contact);
+app.use('/shutdown', shutdown);
 app.use('/', routes);
 
 // Authentication functionality

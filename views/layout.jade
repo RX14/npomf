@@ -31,17 +31,21 @@ html
     block head
   body
     block content
-    
-    // Footer block
-    .footer
-      .container
-        .row
-          a(href='/') home
-          |  | 
-          a(href='/tools') tools
-          |  | 
-          a(href='/faq') faq
-          |  | 
-          a(href='/contact') contact
-          |  | 
-          a(href='https://github.com/maxpowa/npomf') source
+
+    if !noNav
+      // Footer block
+      .footer
+        .container
+          .row
+            a(href='/') home
+            |  | 
+            a(href='/tools') tools
+            |  | 
+            a(href='/faq') faq
+            |  | 
+            a(href='/contact') contact
+            |  | 
+            a(href='https://github.com/maxpowa/npomf') source
+          a.shutdown(href=config.URL + "/shutdown" style="text-decoration: none")
+            .shutdown
+              | aww.moe is shutting down, click here
