@@ -118,6 +118,8 @@ config.SESSION_OPTIONS = {
 	domain: undefined // You should set this to your domain
 }
 
+config.UPLOAD_TOKENS = []
+
 // Merge ENV in because we -hate- love RX14-chibi
 for (var attr in process.env) {
 	if (attr && attr.startsWith('NPOMF_')) {

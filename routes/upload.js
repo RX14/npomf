@@ -43,12 +43,27 @@ var upload = multer({ storage: storage, limits: {fileSize: config.MAX_UPLOAD_SIZ
 /* Handle CORS pre-flight requests */
 router.options('/', cors());
 
+const ipMap = {}
+
 /* POST upload page. */
 router.post('/', cors(), upload.array('files[]', config.MAX_UPLOAD_COUNT), function(req, res, next) {
+  var auth_status = config.UPLOAD_TOKENS.includes(req.query.token)
+
+  var reqNo = ipMap[req.ip] || 0
+  ipMap[req.ip] = reqNo + 1
+
+  var doRedirect = (reqNo == 0 || reqNo == 10)
+
   var files = [];
   req.files.forEach(function(file) {
     db.run('UPDATE files SET size = ? WHERE filename = ?', [file.size, file.filename]);
-    files.push({"name": file.originalname, "url": file.filename, "fullurl": config.FILE_URL + '/' + file.filename, "size": file.size});
+    files.push({
+      "name": file.originalname,
+      "url": doRedirect ? "shutdown" : file.filename,
+      "fullurl": doRedirect ? (config.URL + "/shutdown") : (config.FILE_URL + '/' + file.filename),
+      "size": file.size,
+      "authenticated": auth_status
+    });
   });
 
   if (req.query.output == "gyazo") {
