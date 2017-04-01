@@ -39,6 +39,14 @@ block content
         |       
         button.button-primary#upload-button
           | &nbsp; Select or drop file(s)…
+        | 
+        button#token-button
+          | &nbsp; Set upload token
+        | 
+        span.hidden#cancer
+          input#token-input(type="text")
+          | 
+          button#token-submit-button Set
         button.u-pull-right.button#paste-button
           | &nbsp; Paste…
         .hidden#paste-wrap

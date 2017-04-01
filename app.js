@@ -127,7 +127,8 @@ if (app.get('env') === 'development') {
       title: status + ' · ' + err.message,
       message: err.message,
       error: err,
-      status: status
+      status: status,
+      config
     });
   });
 }
@@ -140,7 +141,8 @@ app.use(function(err, req, res, next) {
   res.render('error', {
     title: status + ' · ' + err.message,
     message: err.message,
-    status: status
+    status: status,
+    config
   });
 });
 

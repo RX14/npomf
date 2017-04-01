@@ -7,6 +7,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
   previewNode.parentNode.removeChild(previewNode);
 
   var post_url = document.querySelector('meta[name="upload-url"]').getAttribute('value') || "";
+  post_url += "/upload"
+  if (localStorage.getItem("token")) {
+    post_url += "?token=" + localStorage.getItem("token")
+  }
+
+  var token_button = document.querySelector("#token-button");
+  var cancer = document.querySelector("#cancer");
+  token_button.addEventListener("click", function() {
+    token_button.style.display = "none";
+    cancer.style.display = "inline-block";
+  })
+
+  var token_input = document.querySelector("#token-input");
+  var token_submit_button = document.querySelector("#token-submit-button");
+  token_submit_button.addEventListener("click", function() {
+    var token = token_input.value;
+    localStorage.setItem("token", token);
+    location.reload();
+  })
 
   function bytesToSize(bytes) {
     var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -30,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
              data + '\r\n' +
              '--' + boundary + '--';
 
-    xhr.open("POST", post_url + "/upload", true);
+    xhr.open("POST", post_url, true);
     xhr.setRequestHeader("Content-type", "multipart/form-data; boundary="+boundary);
     xhr.addEventListener('load', function() {
       var data = JSON.parse(this.responseText);
@@ -81,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   var dz = new Dropzone(document.body, { // Make the whole body a dropzone
-    url: post_url + "/upload", // Set the url
+    url: post_url, // Set the url
     paramName: "files[]",
     thumbnailWidth: 60,
     thumbnailHeight: 60,

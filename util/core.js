@@ -19,7 +19,7 @@ if (!String.prototype.endsWith) {
     };
 }
 
-function generate_name(file, db, cb) {
+function generate_name(file, db, req, cb) {
     var ext = path.extname(file.originalname).toLowerCase();
     // Check if extension is a double-dot extension and, if true, override $ext
     var revname = reverse(file.originalname.toLowerCase());
@@ -39,7 +39,7 @@ function generate_name(file, db, cb) {
         db.get('SELECT COUNT(name) FROM files WHERE filename = ?', name, function(err, row) {
             if (row === undefined || row === null || row['COUNT(name)'] === 0) {
                 var now = Math.floor((new Date()).getTime()/1000);
-                db.run('INSERT INTO files (originalname, filename, size, created) VALUES (?, ?, ?, ?)', [file.originalname, name, file.size, now]);
+              db.run('INSERT INTO files (originalname, filename, size, created, upload_invite) VALUES (?, ?, ?, ?, ?)', [file.originalname, name, file.size, now, req.query.token]);
                 cb(name);
             } else {
                 console.warn("Name conflict! (" + name + ")");
@@ -133,8 +133,15 @@ function randomString(length) {
 }
 
 function fileFilter(req, file, cb) {
-    var found = false;
     var error = null;
+    // if(!canUpload(req)) {
+    //     error = new Error("Token missing or invalid. See https://aww.moe/shutdown");
+    //     error.status = 403;
+    //     cb(error, false);
+    //     return;
+    // }
+
+    var found = false;
     config.BANNED_EXTS.forEach(function(ext) {
         if (file.originalname.toLowerCase().endsWith(ext)) {
             found = true;
@@ -146,6 +153,10 @@ function fileFilter(req, file, cb) {
         cb(error, false);
     else
         cb(null, true);
+}
+
+function canUpload(req) {
+    return config.UPLOAD_TOKENS.includes(req.query.token)
 }
 
 function ensureAuthenticated(req, res, next) {
@@ -166,3 +177,4 @@ exports.getUploads = getUploads;
 exports.renameFile = renameFile;
 exports.deleteFile = deleteFile;
 exports.setUserPermissions = setUserPermissions;
+exports.canUpload = canUpload;
