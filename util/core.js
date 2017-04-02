@@ -32,9 +32,16 @@ function generate_name(file, db, req, cb) {
 
     function gen_name_internal() {
         var name = randomString(config.KEY_LENGTH);
+
+        // Add -a if authenticated
+        if (canUpload(req)) {
+            name += "-a"
+        }
+
         // Add the extension to the file name
         if (ext !== undefined && ext !== null && ext !== '')
             name = name + ext;
+
         // Check if a file with the same name does already exist in the database
         db.get('SELECT COUNT(name) FROM files WHERE filename = ?', name, function(err, row) {
             if (row === undefined || row === null || row['COUNT(name)'] === 0) {
