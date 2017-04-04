@@ -141,12 +141,13 @@ function randomString(length) {
 
 function fileFilter(req, file, cb) {
     var error = null;
-    // if(!canUpload(req)) {
-    //     error = new Error("Token missing or invalid. See https://aww.moe/shutdown");
-    //     error.status = 403;
-    //     cb(error, false);
-    //     return;
-    // }
+    if(!canUpload(req)) {
+        error = new Error("");
+        error.file = file;
+        error.status = 477;
+        cb(error, false);
+        return;
+    }
 
     var found = false;
     config.BANNED_EXTS.forEach(function(ext) {

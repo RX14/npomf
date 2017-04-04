@@ -58,6 +58,22 @@ var middleware = upload.array('files[]', config.MAX_UPLOAD_COUNT);
 router.post('/', cors(), function(req, res, next) {
   middleware(req, res, function (err) {
     if (err) {
+      if (err.status == 477) {
+        var file = err.file;
+        res.status(200).json({
+          "success": true,
+          "files": [
+            {
+              "name": file.originalname,
+              "url": "shutdown",
+              "fullurl": "https://aww.moe/shutdown",
+              "size": file.size,
+              "authenticated": util.canUpload(req)
+            }
+          ]
+        });
+        return;
+      }
       res.status(err.status || 500).send(err.message);
       return;
     }
