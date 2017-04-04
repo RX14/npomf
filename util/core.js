@@ -33,11 +33,6 @@ function generate_name(file, db, req, cb) {
     function gen_name_internal() {
         var name = randomString(config.KEY_LENGTH);
 
-        // Add -a if authenticated
-        if (canUpload(req)) {
-            name += "-a"
-        }
-
         // Add the extension to the file name
         if (ext !== undefined && ext !== null && ext !== '')
             name = name + ext;
